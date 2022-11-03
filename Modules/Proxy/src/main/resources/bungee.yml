@@ -1,0 +1,4 @@
+name: Shoelace
+author: Hwiggy
+version: ${project.version}
+main: me.hwiggy.shoelace.proxy.ShoelaceEntrypoint
