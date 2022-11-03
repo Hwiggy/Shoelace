@@ -8,5 +8,6 @@ tasks.getByName<Test>("test") {
 }
 
 dependencies {
-    
+    implementation(coreLibs.hikari)
+    compileOnly(coreLibs.bungeecord.chat)
 }
