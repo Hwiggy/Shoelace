@@ -12,5 +12,6 @@ subprojects {
         mavenLocal()
         mavenCentral()
         maven("https://nexus.mcdevs.us/repository/mcdevs")
+        maven("https://repo.codemc.org/repository/maven-public/")
     }
 }

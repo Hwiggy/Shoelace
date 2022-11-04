@@ -1,0 +1,5 @@
+name: Shoelace
+version: ${project.version}
+main: me.hwiggy.shoelace.spigot.ShoelaceEntrypoint
+author: Hwiggy
+depend: [Kotlin, Itemizer]

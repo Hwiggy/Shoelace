@@ -1,5 +1,7 @@
 rootProject.name = "Shoelace"
 
+val nbtApiVersion = "2.10.0"
+
 pluginManagement {
     plugins {
         kotlin("jvm") version "1.7.20"
@@ -14,6 +16,7 @@ dependencyResolutionManagement {
             library("bungeecord-chat", "net.md-5:bungeecord-chat:1.19-R0.1-SNAPSHOT")
             library("proxy", "net.md-5:bungeecord-api:1.19-R0.1-SNAPSHOT")
             library("spigot", "org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT")
+            library("nbt-api", "de.tr7zw:item-nbt-api-plugin:$nbtApiVersion")
             library("hikari", "com.zaxxer:HikariCP:5.0.1")
         }
     }
