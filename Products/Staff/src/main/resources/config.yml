@@ -1,0 +1,17 @@
+storage:
+  type: "local"
+  config:
+    filename: "storage.yml"
+authentication:
+  code:
+    hash: "SHA1"
+    length: 6
+  verifier:
+    period: 30
+    discrepancy: 1
+  qrdata:
+    issuer: "StaffPlugin"
+login-commands:
+  - "op %player%"
+logout-commands:
+  - "deop %player%"

@@ -1,0 +1,6 @@
+name: Shoelace
+version: ${project.version}
+main: me.hwiggy.shoelace.spigot.ShoelaceEntrypoint
+author: Hwiggy
+depend: [kotlin-stdlib]
+api-version: 1.13

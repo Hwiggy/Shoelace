@@ -1,11 +1,12 @@
 package me.hwiggy.shoelace.api.messages.transformer.string
 
+import me.hwiggy.shoelace.api.messages.Messages
+import me.hwiggy.shoelace.api.messages.transformer.MessageTransformers
+import me.hwiggy.shoelace.api.messages.transformer.PatternTransformer
+import me.hwiggy.shoelace.api.messages.transformer.string.impl.StringBlankTransformer
 import me.hwiggy.shoelace.api.messages.transformer.string.impl.StringCenterTransformer
 import me.hwiggy.shoelace.api.messages.transformer.string.impl.StringHeaderTransformer
 import me.hwiggy.shoelace.api.messages.transformer.string.impl.StringLineTransformer
-import me.hwiggy.shoelace.api.messages.Messages
-import me.hwiggy.shoelace.api.messages.transformer.MessageTransformers
-import me.hwiggy.shoelace.api.messages.transformer.string.impl.StringBlankTransformer
 
 class StringTransformers @JvmOverloads constructor(
     init: MessageTransformers<String>.() -> Unit = { }
@@ -16,6 +17,10 @@ class StringTransformers @JvmOverloads constructor(
             register(StringCenterTransformer)
             register(StringHeaderTransformer)
             register(StringBlankTransformer)
+        }
+
+        @JvmStatic fun registerGlobal(transformer: PatternTransformer<String>) {
+            globals.register(transformer)
         }
     }
 

@@ -1,0 +1,4 @@
+name: ${project.name}
+version: ${project.version}
+main: "me.hwiggy.shoelace.staff.Staff"
+depend: [ "Shoelace" ]

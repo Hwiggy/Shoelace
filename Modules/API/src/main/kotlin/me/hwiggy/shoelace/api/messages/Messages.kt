@@ -74,3 +74,5 @@ object Messages {
 }
 
 fun String.insert(position: Int, other: String) = substring(0, position) + other + substring(position, length)
+
+fun Int.formatWithUnit(unit: String, suffix: String = "s"): String = if (this == 1) "$this $unit" else "$this $unit$suffix"

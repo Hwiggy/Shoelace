@@ -1,0 +1,10 @@
+PREFIX: "&8&l[&aStaff&8&l]&r"
+staff:
+  create:
+    prompt: "<prefix> &ePlease scan the map in your inventory with a 2FA app to begin setup."
+  login:
+    prompt: "<prefix> &eEnter the TOTP code from your 2FA app to log in!"
+    success: "<prefix> &a2FA accepted! You are now logged in!"
+    invalid: "<prefix> &cYou did not enter a valid code, please try again! (%remaining% remaining)"
+    failed: "<prefix> &cYou failed to provide a valid TOTP code, refusing login!"
+  logout: "<prefix> &aYou have successfully logged out!"

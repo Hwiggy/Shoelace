@@ -1,13 +1,11 @@
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
-}
-
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+plugins {
+    kotlin("jvm")
 }
 
 dependencies {
-    implementation(coreLibs.hikari)
+    compileOnly(kotlin("stdlib"))
     compileOnly(coreLibs.bungeecord.chat)
+
+    implementation(coreLibs.hikari)
+    implementation(coreLibs.regroup.api)
 }

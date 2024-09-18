@@ -1,12 +1,12 @@
 package me.hwiggy.shoelace.api.messages.transformer.component
 
 import me.hwiggy.shoelace.api.messages.transformer.MessageTransformers
+import me.hwiggy.shoelace.api.messages.transformer.PatternTransformer
 import me.hwiggy.shoelace.api.messages.transformer.component.impl.ComponentBlankTransformer
 import me.hwiggy.shoelace.api.messages.transformer.component.impl.ComponentCenterTransformer
 import me.hwiggy.shoelace.api.messages.transformer.component.impl.ComponentHeaderTransformer
 import me.hwiggy.shoelace.api.messages.transformer.component.impl.ComponentLineTransformer
 import net.md_5.bungee.api.chat.BaseComponent
-import net.md_5.bungee.api.chat.TextComponent
 
 class ComponentTransformers @JvmOverloads constructor(
     init: MessageTransformers<Array<out BaseComponent>>.() -> Unit = { }
@@ -18,10 +18,12 @@ class ComponentTransformers @JvmOverloads constructor(
             register(ComponentCenterTransformer)
             register(ComponentLineTransformer)
         }
+
+        @JvmStatic fun registerGlobal(transformer: PatternTransformer<Array<out BaseComponent>>) {
+            globals.register(transformer)
+        }
     }
 
     override fun preprocess(input: Array<out BaseComponent>) = input
     override fun globals() = globals
-
-    fun apply(input: String) = apply(TextComponent.fromLegacyText(input))
 }

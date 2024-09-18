@@ -2,44 +2,34 @@ package me.hwiggy.shoelace.api.messages
 
 import me.hwiggy.shoelace.api.messages.transformer.component.ComponentTransformers
 import me.hwiggy.shoelace.api.messages.transformer.component.impl.ComponentDirectTransformer
+import net.md_5.bungee.api.chat.BaseComponent
+import net.md_5.bungee.api.chat.TextComponent
 
-abstract class AbstractMessageHandler<R> protected constructor(
-    private val messageRetriever: (String) -> String?,
-    private val listMessageRetriever: (String) -> List<String>
-) {
-    private val transformers = ComponentTransformers {
-        register(ComponentDirectTransformer("prefix", getMessage("PREFIX")))
+abstract class AbstractMessageHandler<Recipient> protected constructor() {
+    private val componentTransformers by lazy {
+        ComponentTransformers {
+            register(ComponentDirectTransformer("prefix", getContent("PREFIX") ?: return@ComponentTransformers))
+        }
     }
+    abstract fun getContent(path: String): String?
 
-    private fun getMessage(path: String): String = requireNotNull(messageRetriever(path)) {
-        "Could not load message at path: $path !"
+    fun getFormattedContent(
+        path: String,
+        transform: (String) -> String
+    ) = (getContent(path) ?: "").let(transform).let(TextComponent::fromLegacyText).let(componentTransformers::apply)
+
+    fun getFormattedLegacy(path: String, transform: (String) -> String): String {
+        return getFormattedContent(path, transform).toLegacyText()
     }
+    fun getFormattedContent(path: String) = getFormattedContent(path) { it }
 
-    private fun getListMessage(path: String): List<String> = listMessageRetriever(path)
-
-    @JvmOverloads
-    fun getFormattedMessage(
-        path: String, transform: (String) -> String = { it }
-    ) = formatMessage(getMessage(path).let(transform))
-
-    @JvmOverloads
-    fun getFormattedListMessage(
-        path: String, transform: (String) -> String = { it }
-    ) = formatMessage(getListMessage(path).joinToString("\n").let(transform))
-
-    fun formatMessage(toFormat: String) = transformers.apply(toFormat)
+    fun getFormattedLegacy(path: String) = getFormattedLegacy(path) { it }
 
     abstract fun sendMessage(
-        recipient: R,
+        recipient: Recipient,
         path: String,
-        transform: (String) -> String
+        transform: (String) -> String = { it }
     )
-    fun sendMessage(recipient: R, path: String) = sendMessage(recipient, path) { it }
 
-    abstract fun sendListMessage(
-        recipient: R,
-        path: String,
-        transform: (String) -> String
-    )
-    fun sendListMessage(recipient: R, path: String) = sendListMessage(recipient, path) { it }
+    fun Array<out BaseComponent>.toLegacyText(): String = TextComponent.toLegacyText(*this)
 }

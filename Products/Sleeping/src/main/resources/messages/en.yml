@@ -1,0 +1,5 @@
+PREFIX: "&8&l[&eSleep&8&l]&r"
+SLEEPING:
+  ENTERED_BED: "<prefix> &e<player> has entered a bed (<sleeping>/<threshold>)"
+  LEFT_BED: "<prefix> &e<player> has left a bed (<sleeping>/<threshold>)"
+  SKIP_TO_DAY: "<prefix> &aSleep threshold has been met, skipping to day!"
