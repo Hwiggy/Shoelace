@@ -50,8 +50,8 @@ class StaffCommand(
     }
 
     private fun bulkExecuteCommands(who: Player, path: String) {
-        config.getStringList(path).map { it.replace("%player%", who.name) }.forEach {
-            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), it)
+        config.getStringList(path).forEach {
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), it.replace("%player%", who.name))
         }
     }
     private fun restorePlayerInventory(who: Player) {
@@ -95,13 +95,24 @@ class StaffCommand(
     private val loginPrompt = Konverse.prompt {
         initial { messages.getFormattedLegacy("staff.login.prompt") }
         validator { ctx, input -> totp.testCode((ctx.forWhom as Player).uniqueId, input) }
-        accepted { _, _ -> successPrompt }
+        accepted { _, _ ->
+            Konverse.prompt {
+                initial { messages.getFormattedLegacy("staff.login.success") }
+                accepted { ctx, _ ->
+                    ctx.setSessionData("success", true)
+                    Prompt.END_OF_CONVERSATION
+                }
+            }
+        }
         rejected { ctx, _ ->
             val nextPrompt = this.build()
             val tries = ctx.allSessionData.compute("tries") { _, b ->
                 (b as Int?)?.plus(1) ?: 1
             } as Int
-            if (tries > attempts) failedPrompt else {
+            if (tries >= attempts) Konverse.prompt {
+                initial { messages.getFormattedLegacy("staff.login.failed") }
+                accepted { _, _ -> Prompt.END_OF_CONVERSATION }
+            } else {
                 Konverse.prompt {
                     initial {
                         messages.getFormattedLegacy("staff.login.invalid") {
@@ -115,20 +126,7 @@ class StaffCommand(
         blocking()
     }
 
-    private val successPrompt = Konverse.prompt {
-        initial { messages.getFormattedLegacy("staff.login.success") }
-        accepted { ctx, _ ->
-            ctx.setSessionData("success", true)
-            Prompt.END_OF_CONVERSATION
-        }
-    }
-
-    private val failedPrompt = Konverse.prompt {
-        initial { messages.getFormattedLegacy("staff.login.failed") }
-        accepted { _, _ -> Prompt.END_OF_CONVERSATION }
-    }
-
-    private val create = ConversationFactory(plugin).withFirstPrompt(createPrompt)
-    private val login = ConversationFactory(plugin).withFirstPrompt(loginPrompt)
+    private val create = ConversationFactory(plugin).withFirstPrompt(createPrompt).withLocalEcho(false)
+    private val login = ConversationFactory(plugin).withFirstPrompt(loginPrompt).withLocalEcho(false)
 }
 

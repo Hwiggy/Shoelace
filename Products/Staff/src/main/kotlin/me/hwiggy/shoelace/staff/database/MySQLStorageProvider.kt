@@ -79,4 +79,14 @@ class MySQLStorageProvider(
             ).executeUpdate()
         }
     }
+
+    override fun clearStoredInventory(id: UUID) {
+        pool.connect {
+            it.prepareStatement(
+                "UPDATE $inventoryTable SET `armor` = null AND `items` = NULL WHERE `id` = ?;"
+            ).also {
+                it.setString(1, id.toString())
+            }.executeUpdate()
+        }
+    }
 }

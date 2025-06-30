@@ -9,3 +9,8 @@ dependencies {
     compileOnly(project(":Modules:Implementation"))
     implementation("dev.samstevens.totp:totp:1.7.1")
 }
+tasks {
+    shadowJar {
+        minimize()
+    }
+}

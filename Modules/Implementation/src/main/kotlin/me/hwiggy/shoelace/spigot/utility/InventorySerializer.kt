@@ -1,6 +1,6 @@
 package me.hwiggy.shoelace.spigot.utility
 
-import org.bukkit.configuration.ConfigurationSection
+import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.bukkit.util.io.BukkitObjectInputStream
@@ -12,15 +12,24 @@ import java.util.*
 class SerializedInventory(
     val armor: String,
     val items: String
-) {
+) : ConfigurationSerializable {
     operator fun component1() = armor
     operator fun component2() = items
 
     companion object {
-        fun from(configuration: ConfigurationSection) =
-            SerializedInventory(configuration["armor"] as String, configuration["items"] as String)
+        @JvmStatic fun deserialize(map: Map<String, Any>): SerializedInventory {
+            return SerializedInventory(map["armor"] as String, map["items"] as String)
+        }
+    }
+
+    override fun serialize(): MutableMap<String, Any> {
+        val map = LinkedHashMap<String, Any>()
+        map["armor"] = armor
+        map["items"] = items
+        return map
     }
 }
+
 object InventorySerializer {
     private val encoder = Base64.getEncoder()
     private val decoder = Base64.getDecoder()

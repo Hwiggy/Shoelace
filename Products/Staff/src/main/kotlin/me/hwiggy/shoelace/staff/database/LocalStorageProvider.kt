@@ -19,7 +19,7 @@ class LocalStorageProvider(
     override fun credential(id: UUID) = file["${id}.secret"] as String?
 
     override fun storeCredential(id: UUID, secret: String): String {
-        val data = file.getConfigurationSection(id.toString()) ?:  file.createSection(id.toString())
+        val data = getDataSection(id)
         data["secret"] = secret
         resources.save(YamlResource, file, fileName)
         return secret
@@ -32,9 +32,20 @@ class LocalStorageProvider(
         return SerializedInventory(armor, items)
     }
     override fun storeInventory(id: UUID, inventory: SerializedInventory) {
-        val data = file.getConfigurationSection(id.toString()) ?:  file.createSection(id.toString())
+        val data = getDataSection(id)
         data["armor"] = inventory.armor
         data["items"] = inventory.items
         resources.save(YamlResource, file, fileName)
+    }
+
+    override fun clearStoredInventory(id: UUID) {
+        val data = getDataSection(id)
+        data["armor"] = null
+        data["items"] = null
+        resources.save(YamlResource, file, fileName)
+    }
+
+    private fun getDataSection(id: UUID): ConfigurationSection {
+        return file.getConfigurationSection(id.toString()) ?: file.createSection(id.toString())
     }
 }
